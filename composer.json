@@ -1,0 +1,53 @@
+{
+    "name": "schnittstabil/json-decode-file",
+    "description": "Read and decode JSON files",
+    "license": "MIT",
+    "keywords": ["file_get_contents", "json_decode", "utf", "BOM", "json", "file", "parse", "decode", "exception", "validator"],
+    "authors": [
+        {
+            "name": "Michael Mayer",
+            "email": "michael@schnittstabil.de"
+        }
+    ],
+    "autoload": {
+        "psr-4": { "Schnittstabil\\JsonDecodeFile\\": "src" },
+        "files": ["src/functions.php"]
+    },
+    "autoload-dev": {
+        "psr-4": { "Schnittstabil\\JsonDecodeFile\\": "tests" }
+    },
+    "require": {
+        "php": ">=5.6.0",
+        "duncan3dc/bom-string": "^0.1.0",
+        "kherge/file": "^1.0",
+        "seld/jsonlint": "^1.0"
+    },
+    "require-dev": {
+        "codeclimate/php-test-reporter": "^0.3",
+        "satooshi/php-coveralls": "^1.0",
+        "vladahejda/phpunit-assert-exception": "^1.0"
+    },
+    "extra": {
+        "schnittstabil/sugared-phpunit": {
+            "bootstrap": "tests/bootstrap.php"
+        },
+        "schnittstabil/sugared-phpmd": {
+            "inputPath": "src/JsonDecodeFile.php,tests"
+        }
+    },
+    "scripts": {
+        "clean": "rm -rf build/",
+        "doc": [
+            "sugared-sami",
+            "phpmetrics --report-html build/phpmetrics/index.html src/"
+        ],
+        "lint": [
+            "sugared-cs"
+        ],
+        "test": [
+            "sugared-phpunit",
+            "composer lint"
+        ],
+        "travis": "sugared-phpunit"
+    }
+}

@@ -1,0 +1,30 @@
+language: php
+
+php:
+  - 5.6
+  - 7
+  - hhvm
+
+sudo: false
+
+install:
+  - composer selfupdate
+  - composer install
+  - composer global require schnittstabil/sugared-phpunit
+  - if [ "$TRAVIS_PHP_VERSION" == "5.6" ]; then composer global require schnittstabil/sugared-cs; fi
+  - export PATH=$PATH:`composer global config bin-dir --absolute`
+
+before_script:
+  - if [ "$TRAVIS_PHP_VERSION" == "5.6" ]; then pecl install runkit; fi
+
+script:
+  - composer travis
+  - if [ "$TRAVIS_PHP_VERSION" == "5.6" ]; then composer lint; fi
+
+after_success:
+  - if [ "$TRAVIS_PHP_VERSION" == "5.6" ]; then vendor/bin/test-reporter; fi
+  - if [ "$TRAVIS_PHP_VERSION" == "5.6" ]; then vendor/bin/coveralls -v; fi
+
+addons:
+  code_climate:
+    repo_token: f7cda3c831806b53c3a4c7ba6a7585da152bef2bd29ac53bf512cea748d5ea40
