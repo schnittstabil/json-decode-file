@@ -4,7 +4,7 @@
 
 > Read and decode JSON files
 
-[Handles UTF byte order marks (BOM)](https://github.com/duncan3dc/bom-string), uses [kherge/file](https://github.com/kherge/php-file) and [seld/jsonlint](https://github.com/Seldaek/jsonlint) to throw helpful File and JSON Exceptions respectively.
+[Handles UTF byte order marks (BOM)](https://github.com/duncan3dc/bom-string), uses [kherge/file-manager](https://github.com/kherge-php/file-manager) and [seld/jsonlint](https://github.com/Seldaek/jsonlint) to throw helpful File and JSON Exceptions respectively.
 
 ## Install
 
@@ -19,7 +19,7 @@ use function Schnittstabil\JsonDecodeFile\jsonDecodeFile;
 
 try {
     $json = jsonDecodeFile('composer.json');
-} catch (\KHerGe\File\Exception\FileException $err) {
+} catch (\KHerGe\File\Exception\ResourceException $err) {
     echo $err->getMessage(), PHP_EOL;
 } catch (\Seld\JsonLint\ParsingException $err) {
     echo $err->getMessage(), PHP_EOL;

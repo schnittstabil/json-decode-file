@@ -2,7 +2,7 @@
 
 namespace Schnittstabil\JsonDecodeFile;
 
-use KHerGe\File\Exception\FileException;
+use KHerGe\File\Exception\ResourceException;
 use Seld\JsonLint\ParsingException;
 
 if (!function_exists('Schnittstabil\JsonDecodeFile\jsonDecodeFile')) {
@@ -16,7 +16,7 @@ if (!function_exists('Schnittstabil\JsonDecodeFile\jsonDecodeFile')) {
      *
      * @return mixed the value encoded in json in appropriate PHP type
      *
-     * @throws FileException
+     * @throws ResourceException
      * @throws ParsingException
      *
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)

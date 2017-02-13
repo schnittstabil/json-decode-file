@@ -3,7 +3,7 @@
 namespace Schnittstabil\JsonDecodeFile;
 
 use KHerGe\File\File;
-use KHerGe\File\Exception\FileException;
+use KHerGe\File\Exception\ResourceException;
 use Seld\JsonLint\JsonParser;
 use Seld\JsonLint\ParsingException;
 use duncan3dc\Bom\Util as BomUtil;
@@ -20,18 +20,13 @@ class JsonDecodeFile
      *
      * @return string the read data
      *
-     * @throws FileException
+     * @throws ResourceException
      */
     protected static function readFile($path)
     {
-        $file = new File($path, 'r');
-        $size = $file->getSize();
+        @$file = new File($path, 'r');
 
-        if ($size === 0) {
-            return '';
-        }
-
-        return $file->fread($size);
+        return $file->read();
     }
 
     /**
@@ -69,7 +64,7 @@ class JsonDecodeFile
      *
      * @return mixed the value encoded in json in appropriate PHP type
      *
-     * @throws FileException
+     * @throws ResourceException
      * @throws ParsingException
      *
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)

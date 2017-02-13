@@ -2,9 +2,8 @@
 
 namespace Schnittstabil\JsonDecodeFile;
 
-use KHerGe\File\Exception\FileException;
+use KHerGe\File\Exception\ResourceException;
 use Seld\JsonLint\ParsingException;
-use VladaHejda\AssertException;
 
 /**
  * schnittstabil/sugared-phpunit may depend on Schnittstabil/JsonDecodeFile,
@@ -15,10 +14,8 @@ use VladaHejda\AssertException;
  * @runTestsInSeparateProcesses
  * @preserveGlobalState disabled
  */
-class JsonDecodeFileTest extends \PHPUnit_Framework_TestCase
+class JsonDecodeFileTest extends \PHPUnit\Framework\TestCase
 {
-    use AssertException;
-
     public static function setUpBeforeClass()
     {
         chmod('tests/Fixtures/EPERM.json', 0);
@@ -46,22 +43,19 @@ class JsonDecodeFileTest extends \PHPUnit_Framework_TestCase
 
     public function testJsonDecodeFileShouldThrowOnENOENT()
     {
-        $this->assertException(function () {
-            jsonDecodeFile('tests/Fixtures/ENOENT.json');
-        }, FileException::class);
+        $this->expectException(ResourceException::class);
+        jsonDecodeFile('tests/Fixtures/ENOENT.json');
     }
 
     public function testJsonDecodeFileShouldThrowOnEPERM()
     {
-        $this->assertException(function () {
-            jsonDecodeFile('tests/Fixtures/EPERM.json');
-        }, FileException::class);
+        $this->expectException(ResourceException::class);
+        jsonDecodeFile('tests/Fixtures/EPERM.json');
     }
 
     public function testJsonDecodeFileShouldThrowOnInvalidJson()
     {
-        $this->assertException(function () {
-            jsonDecodeFile('tests/Fixtures/empty.json');
-        }, ParsingException::class);
+        $this->expectException(ParsingException::class);
+        jsonDecodeFile('tests/Fixtures/empty.json');
     }
 }

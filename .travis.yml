@@ -3,6 +3,8 @@ language: php
 php:
   - 5.6
   - 7
+  - 7.0
+  - 7.1
   - hhvm
 
 sudo: false
@@ -10,20 +12,21 @@ sudo: false
 install:
   - composer selfupdate
   - composer install
-  - composer global require schnittstabil/sugared-phpunit
-  - if [ "$TRAVIS_PHP_VERSION" == "5.6" ]; then composer global require schnittstabil/sugared-cs; fi
-  - export PATH=$PATH:`composer global config bin-dir --absolute`
+  - if [ "$TRAVIS_PHP_VERSION" == "5.6" ]; then composer require codeclimate/php-test-reporter satooshi/php-coveralls; fi
 
 before_script:
   - if [ "$TRAVIS_PHP_VERSION" == "5.6" ]; then pecl install runkit; fi
 
 script:
   - composer travis
-  - if [ "$TRAVIS_PHP_VERSION" == "5.6" ]; then composer lint; fi
 
 after_success:
   - if [ "$TRAVIS_PHP_VERSION" == "5.6" ]; then vendor/bin/test-reporter; fi
   - if [ "$TRAVIS_PHP_VERSION" == "5.6" ]; then vendor/bin/coveralls -v; fi
+
+matrix:
+  allow_failures:
+    - php: hhvm
 
 addons:
   code_climate:
