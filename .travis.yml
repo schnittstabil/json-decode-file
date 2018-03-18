@@ -11,8 +11,11 @@ sudo: false
 
 install:
   - composer selfupdate
-  - composer install
-  - if [ "$TRAVIS_PHP_VERSION" == "5.6" ]; then composer require codeclimate/php-test-reporter satooshi/php-coveralls; fi
+  - if [ "$TRAVIS_PHP_VERSION" == "5.6" ]; then
+      composer require 'codeclimate/php-test-reporter:*' 'satooshi/php-coveralls:*';
+    else
+      composer install;
+    fi
 
 before_script:
   - if [ "$TRAVIS_PHP_VERSION" == "5.6" ]; then pecl install runkit; fi

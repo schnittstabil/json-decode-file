@@ -18,12 +18,12 @@
     },
     "require": {
         "php": ">=5.6.0",
-        "duncan3dc/bom-string": "^0.1.0|^0.2.0",
+        "duncan3dc/bom-string": "^0.1.0 || ^0.2.0",
         "kherge/file-manager": "^2.0",
         "seld/jsonlint": "^1.0"
     },
     "require-dev": {
-        "schnittstabil/phpunit-starter": "^6.0"
+        "schnittstabil/phpunit-starter": "^6.0 || ^7.0"
     },
     "extra": {
         "sugared-rim/phpmd": {
