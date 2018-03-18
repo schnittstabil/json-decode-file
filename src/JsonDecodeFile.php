@@ -24,7 +24,26 @@ class JsonDecodeFile
      */
     protected static function readFile($path)
     {
-        @$file = new File($path, 'r');
+        // Workaround for https://github.com/kherge-php/file-manager/pull/2
+        $error = null;
+        set_error_handler(function ($severity, $message, $filename, $lineno) use (&$error) {
+            $error = new \ErrorException($message, 0, $severity, $filename, $lineno);
+        }, E_WARNING);
+
+        try {
+            $file = new File($path, 'r');
+        } finally {
+            restore_error_handler();
+        }
+
+        if ($error) {
+            // @codeCoverageIgnoreStart
+            throw new ResourceException(
+                "The file \"$path\" could not be opened.",
+                $error
+            );
+            // @codeCoverageIgnoreEnd
+        }
 
         return $file->read();
     }
