@@ -13,18 +13,26 @@ matrix:
 
 install:
   - composer selfupdate
+  - composer install
+  - if [ "$QA" == "yes" ]; then composer global require --update-no-dev codeclimate/php-test-reporter:dev-master satooshi/php-coveralls:^1.0; fi
+  - export PATH=$PATH:`composer global config bin-dir --absolute`
+
+before_script:
   - |
     if [ "$QA" == "yes" ]; then
-      composer require 'satooshi/php-coveralls:*'
-    else
-      composer install
+      curl -L -o runkit.tgz https://github.com/runkit7/runkit7/releases/download/1.0.7/runkit-1.0.7.tgz
+      pecl install ./runkit.tgz
     fi
 
 script:
   - composer travis
 
 after_success:
-  - if [ "$QA" == "yes" ]; then travis_retry php vendor/bin/php-coveralls -v; fi
+  - |
+    if [ "$QA" == "yes" ]; then
+      travis_retry coveralls -v
+      travis_retry test-reporter
+    fi
 
 addons:
   code_climate:
