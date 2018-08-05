@@ -4,6 +4,7 @@ namespace Schnittstabil\JsonDecodeFile;
 
 use KHerGe\File\Exception\ResourceException;
 use Seld\JsonLint\ParsingException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * schnittstabil/sugared-phpunit may depend on Schnittstabil/JsonDecodeFile,
@@ -14,7 +15,7 @@ use Seld\JsonLint\ParsingException;
  * @runTestsInSeparateProcesses
  * @preserveGlobalState disabled
  */
-class JsonDecodeFileTest extends \PHPUnit\Framework\TestCase
+class JsonDecodeFileTest extends TestCase
 {
     public static function setUpBeforeClass()
     {
@@ -44,18 +45,24 @@ class JsonDecodeFileTest extends \PHPUnit\Framework\TestCase
     public function testJsonDecodeFileShouldThrowOnENOENT()
     {
         $this->expectException(ResourceException::class);
+        $this->expectExceptionMessage('The file "tests/Fixtures/ENOENT.json" could not be opened (r).');
         jsonDecodeFile('tests/Fixtures/ENOENT.json');
     }
 
     public function testJsonDecodeFileShouldThrowOnEPERM()
     {
         $this->expectException(ResourceException::class);
+        $this->expectExceptionMessage('The file "tests/Fixtures/EPERM.json" could not be opened (r).');
         jsonDecodeFile('tests/Fixtures/EPERM.json');
     }
 
     public function testJsonDecodeFileShouldThrowOnInvalidJson()
     {
         $this->expectException(ParsingException::class);
+        $this->expectExceptionMessage('Parse error on line 1:
+
+^
+Expected one of: \'STRING\', \'NUMBER\', \'NULL\', \'TRUE\', \'FALSE\', \'{\', \'[\'');
         jsonDecodeFile('tests/Fixtures/empty.json');
     }
 }

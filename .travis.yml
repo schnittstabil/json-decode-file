@@ -1,37 +1,38 @@
 language: php
 
-php:
-  - 5.6
-  - 7
-  - 7.0
-  - 7.1
-  - 7.2
-  - hhvm
-
-sudo: false
+matrix:
+  include:
+    - php: 7.1
+    - php: 7.2
+      env: QA=yes
+    - php: hhvm
+    - php: nightly
+  allow_failures:
+    - php: hhvm
+    - php: nightly
 
 install:
   - composer selfupdate
-  - |
-    if [ "$TRAVIS_PHP_VERSION" == "5.6" ]; then
-      composer require 'codeclimate/php-test-reporter:*' 'satooshi/php-coveralls:*'
-    else
-      composer install
-    fi
+  - composer install
+  - if [ "$QA" == "yes" ]; then composer global require --update-no-dev codeclimate/php-test-reporter:dev-master satooshi/php-coveralls:^1.0; fi
+  - export PATH=$PATH:`composer global config bin-dir --absolute`
 
 before_script:
-  - if [ "$TRAVIS_PHP_VERSION" == "5.6" ]; then pecl install runkit; fi
+  - |
+    if [ "$QA" == "yes" ]; then
+      curl -L -o runkit.tgz https://github.com/runkit7/runkit7/releases/download/1.0.7/runkit-1.0.7.tgz
+      pecl install ./runkit.tgz
+    fi
 
 script:
   - composer travis
 
 after_success:
-  - if [ "$TRAVIS_PHP_VERSION" == "5.6" ]; then vendor/bin/test-reporter; fi
-  - if [ "$TRAVIS_PHP_VERSION" == "5.6" ]; then vendor/bin/coveralls -v; fi
-
-matrix:
-  allow_failures:
-    - php: hhvm
+  - |
+    if [ "$QA" == "yes" ]; then
+      travis_retry coveralls -v
+      travis_retry test-reporter
+    fi
 
 addons:
   code_climate:
